@@ -1,3 +1,5 @@
+//Este archivo se conecta a la base de datos MySQL
+
 const mysql = require("mysql2");
 
 const connection = mysql.createConnection({
@@ -9,10 +11,10 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (err) {
-    console.error("Error de conexión a MySQL:", err);
+    console.error("❌ Error de conexión a MySQL:", err);
     return;
   }
-  console.log("Conectado a MySQL");
+  console.log("✅ Conectado a MySQL");
 });
 
 module.exports = connection;

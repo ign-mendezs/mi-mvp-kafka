@@ -1,17 +1,35 @@
+//Este middleware es el encargado de verificar si el token JWT enviado en las solicitudes es válido
+
 const jwt = require("jsonwebtoken");
 
-const verifyToken = (req, res, next) => {
-  const token = req.header("Authorization");
+const authenticateUser = (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-  if (!token) return res.status(403).json({ error: "Acceso denegado" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({ error: "Acceso no autorizado - Token no proporcionado" });
+  }
+  const token = authHeader.split(" ")[1];
 
   try {
-    const verified = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
-    req.user = verified;
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || "tu_secreto_jwt"
+    );
+
+    if (!decoded.id) {
+      return res
+        .status(403)
+        .json({ error: "Token inválido - No contiene user_id" });
+    }
+    req.user = decoded; // Asigna el usuario al request
+
     next();
-  } catch (err) {
-    res.status(401).json({ error: "Token inválido" });
+  } catch (error) {
+    console.error("Error en autenticación:", error);
+    res.status(403).json({ error: "Token inválido" });
   }
 };
 
-module.exports = verifyToken;
+module.exports = { authenticateUser };

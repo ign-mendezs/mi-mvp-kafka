@@ -1,7 +1,12 @@
+//Este archivo contiene la lógica para manejar las operaciones de autenticación, como registrar un usuario e iniciar sesión, y generar el token JWT
+
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const { generateToken } = require("../config/jwt");
+const db = require("../config/db");
+const jwt = require("jsonwebtoken");
 
+// Función de registro
 const register = (req, res) => {
   const { name, email, password } = req.body;
 
@@ -16,6 +21,7 @@ const register = (req, res) => {
   });
 };
 
+// Función de login
 const login = (req, res) => {
   const { email, password } = req.body;
 
