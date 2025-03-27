@@ -12,6 +12,4 @@ router.post('/register', authController.register);
 // Ruta para el login
 router.post('/login', authController.login);
 
-console.log(app._router.stack.map(r => r.route && r.route.path));
-
 module.exports = router;
