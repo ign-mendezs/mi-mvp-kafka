@@ -1,17 +1,23 @@
-const db = require("../config/db");
+// Define el modelo "User" para gestionar la información de usuarios en la base de datos.
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const User = {
-  findByEmail: (email, callback) => {
-    db.query("SELECT * FROM users WHERE email = ?", [email], callback);
+// Define el modelo User con campos: name, email y password.
+const User = sequelize.define('User', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
-
-  create: (user, callback) => {
-    db.query(
-      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-      [user.name, user.email, user.password],
-      callback
-    );
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
   },
-};
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
 
+// Exporta el modelo para usarlo en la aplicación.
 module.exports = User;
