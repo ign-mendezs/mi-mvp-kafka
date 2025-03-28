@@ -1,3 +1,6 @@
+// Configuración de JWT para autenticación: genera tokens firmados con el id y email del usuario.
+// El token expira en 1 hora.
+
 const jwt = require("jsonwebtoken");
 
 const generateToken = (user) => {

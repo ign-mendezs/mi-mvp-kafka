@@ -1,6 +1,8 @@
+// Define el modelo "User" para gestionar la información de usuarios en la base de datos.
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
+// Define el modelo User con campos: name, email y password.
 const User = sequelize.define('User', {
   name: {
     type: DataTypes.STRING,
@@ -17,4 +19,5 @@ const User = sequelize.define('User', {
   }
 });
 
+// Exporta el modelo para usarlo en la aplicación.
 module.exports = User;
