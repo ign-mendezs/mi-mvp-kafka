@@ -1,3 +1,5 @@
+// Archivo principal del backend: configura Express, conecta la base de datos y define las rutas.
+// Inicia el servidor y sincroniza la base de datos usando Sequelize.
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
