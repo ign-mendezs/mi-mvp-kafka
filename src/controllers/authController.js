@@ -1,42 +1,32 @@
-//Este archivo contiene la lógica para manejar las operaciones de autenticación, como registrar un usuario e iniciar sesión, y generar el token JWT
-
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
-const { generateToken } = require("../config/jwt");
-const db = require("../config/db");
-const jwt = require("jsonwebtoken");
+const User = require('../models/User');
+const { generateToken } = require('../config/jwt');
 
-// Función de registro
-const register = (req, res) => {
-  const { name, email, password } = req.body;
-
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) return res.status(500).json({ error: "Error en el hash de contraseña" });
-
-    User.create({ name, email, password: hashedPassword }, (error, results) => {
-      if (error) return res.status(500).json({ error: "Error al registrar usuario" });
-
-      res.status(201).json({ message: "Usuario registrado correctamente" });
-    });
-  });
+const register = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password: hashedPassword });
+    res.status(201).json({ message: "Usuario registrado correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: "Error al registrar usuario" });
+  }
 };
 
-// Función de login
-const login = (req, res) => {
-  const { email, password } = req.body;
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) return res.status(401).json({ error: "Usuario no encontrado" });
 
-  User.findByEmail(email, (error, results) => {
-    if (error || results.length === 0) return res.status(401).json({ error: "Usuario no encontrado" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ error: "Contraseña incorrecta" });
 
-    const user = results[0];
-
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (!isMatch) return res.status(401).json({ error: "Contraseña incorrecta" });
-
-      const token = generateToken(user);
-      res.json({ token });
-    });
-  });
+    const token = generateToken(user);
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ error: "Error al iniciar sesión" });
+  }
 };
 
 module.exports = { register, login };

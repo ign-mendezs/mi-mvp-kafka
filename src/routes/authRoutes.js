@@ -8,7 +8,6 @@ const authController = require('../controllers/authController');  // Importa el 
 
 // Ruta para el registro
 router.post('/register', authController.register);
-
 // Ruta para el login
 router.post('/login', authController.login);
 
