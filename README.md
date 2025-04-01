@@ -27,7 +27,7 @@ El backend está construido con Node.js y Express, y utiliza SQLite como base de
 - **JWT (JSON Web Tokens)** – para autenticación
 - **bcryptjs** – para encriptación de contraseñas
 - **dotenv** – para manejo de variables de entorno
-
+- **Sequelize** - Al usar Sequelize, el esquema se gestiona en el código y se sincroniza automáticamente, pero si en algún momento requieres un control más fino (versionado, rollback, etc.), se podría migrar a usar las migraciones de Sequelize en lugar de SQL crudo.
 ---
 
 ## 🗂️ Estructura del proyecto
