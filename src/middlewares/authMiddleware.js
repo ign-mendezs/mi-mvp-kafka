@@ -1,4 +1,6 @@
 // Middleware de autenticación: verifica el token JWT y asigna el usuario a la solicitud.
+//Es esencial para proteger rutas y asegurarse de que el usuario esté autenticado antes de cualquier acción protegida.
+
 const jwt = require("jsonwebtoken");
 
 const authenticateUser = (req, res, next) => {

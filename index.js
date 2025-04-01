@@ -3,7 +3,9 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const sequelize = require('./src/config/database'); 
+const sequelize = require('./src/config/database');
+const seedDefaultData = require('./src/seed/seed'); 
+const seedDefaultUser = require('./src/seed/seedUsers'); 
 
 const app = express();
 app.use(express.json());
@@ -20,8 +22,10 @@ app.get('/', (req, res) => {
 
 // Sincronizar base de datos
 const PORT = process.env.PORT || 5000;
-sequelize.sync().then(() => {
+sequelize.sync().then(async () => {
   console.log('Base de datos sincronizada');
+  await seedDefaultData();
+  await seedDefaultUser();
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
   });
