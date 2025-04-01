@@ -4,9 +4,12 @@
 const jwt = require("jsonwebtoken");
 
 const generateToken = (user) => {
-  return jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  const roles = user.Roles ? user.Roles.map(role => role.name) : [];
+  return jwt.sign(
+    { id: user.id, email: user.email, roles },
+    process.env.JWT_SECRET || "tu_secreto_jwt",
+    { expiresIn: "1h" }
+  );
 };
 
 module.exports = { generateToken };
