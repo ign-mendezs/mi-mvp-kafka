@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js"
+    "dev": "nodemon index.js",
+    "kafka:dev": "docker run --rm -it -p 5000:5000 --network kafka-net -v C:\\Users\\ignac\\Desktop\\NABI\\Investigaciones\\mi-react-backend:/app -w /app node:18 sh -c \"rm -rf node_modules package-lock.json && npm install -g nodemon && npm install && nodemon index.js\""
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "kafkajs": "^2.2.4",
     "mysql2": "^3.14.0",
     "sequelize": "^6.37.6",
     "sqlite3": "^5.1.7"
