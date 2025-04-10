@@ -11,6 +11,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const { connectProducer } = require('./src/events/kafkaProducer');
+
+connectProducer().then(() => {
+  console.log("🚀 Productor Kafka conectado");
+});
+
 // Rutas
 const authRoutes = require('./src/routes/authRoutes');
 app.use('/auth', authRoutes);
