@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require('../models/User');
 const { generateToken } = require('../config/jwt');
 const { Role } = require('../models');
+const { sendUserCreatedEvent } = require('../events/kafkaProducer');
 
 const register = async (req, res) => {
   try {
@@ -20,9 +21,17 @@ const register = async (req, res) => {
     if (defaultRole) {
       await newUser.addRole(defaultRole);
     }
+    // Enviamos el evento a Kafka
+    await sendUserCreatedEvent({
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+    });
+
     // Envía respuesta exitosa con código 201.
     return res.status(201).json({ message: "Usuario registrado correctamente" });
   } catch (error) {
+    console.error("❌ Error en register:", error.message);
     // Retorna error 500 si ocurre algún fallo en el registro.
     return res.status(500).json({ error: "Error al registrar usuario" });
   }
